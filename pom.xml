@@ -105,8 +105,11 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <image>
-                        <name>${dockerImageName}</name>
                         <builder>dashaun/builder:tiny</builder>
+                        <name>${dockerImageName}</name>
+                        <tags>
+                            ${dockerImageName}:v1,${dockerImageName}:latest
+                        </tags>
                     </image>
                 </configuration>
                 <executions>
