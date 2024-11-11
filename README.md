@@ -1,2 +1,1 @@
-# ft-webapp
-Feature Tracker Web Application
+# Feature Tracker Web Application

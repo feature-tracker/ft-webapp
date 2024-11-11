@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div>
+        <div class="p-2">
+        <img th:src="${product.imageUrl()}"
+             th:alt="${product.name()}"
+             height="100px">
+        </div>
+
+        <div class="p-2">
+            <h2>Releases</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="release: ${releases}">
+                    <td th:text="${release.code()}">Release code</td>
+                    <td th:text="${release.description()}">Release description</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/products/{code}/releases/new(code=${product.code()})}"
+               class="btn btn-primary">Create a New Release</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

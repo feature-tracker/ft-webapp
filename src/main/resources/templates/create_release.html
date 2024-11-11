@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      layout:decorate="~{layout}">
+<body>
+<div layout:fragment="content">
+    <div class="p-2">
+        <img th:src="${product.imageUrl()}"
+             th:alt="${product.name()}"
+             height="100px">
+    </div>
+    <div class="p-2">
+        <form method="post" th:action="@{/products/{code}/releases(code=${product.code()})}"
+            th:object="${release}">
+            <input type="hidden" name="productCode" th:value="${product.code()}">
+            <div class="mb-3">
+                <label for="code" class="form-label">Release Code</label>
+                <input type="text" class="form-control" id="code" name="code"
+                       placeholder="Enter release code. Ex: 2024.2"
+                       th:field="*{code}"
+                       th:classappend="${#fields.hasErrors('code')}? 'is-invalid'">
+                <div th:if="${#fields.hasErrors('code')}"
+                     th:errors="*{code}" th:class="invalid-feedback">Incorrect data</div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" rows="3"
+                name="description" placeholder="Enter release description"
+                th:field="*{description}"
+                th:classappend="${#fields.hasErrors('description')}? 'is-invalid'"></textarea>
+                <div th:if="${#fields.hasErrors('description')}"
+                     th:errors="*{description}" th:class="invalid-feedback">Incorrect data</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
