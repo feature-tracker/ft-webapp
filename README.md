@@ -6,7 +6,7 @@ via api-gateway.
 ## TechStack
 * Java, Spring Boot
 * Thymeleaf, Bootstrap CSS
-* Spring Security OAuth 2
+* Spring Security OAuth 2, Keycloak
 * Maven
 
 ## Prerequisites
