@@ -63,4 +63,20 @@ public class FeatureServiceClient {
             throw new RuntimeException("Failed to create new release");
         }
     }
+
+    public void createFeature(
+            @RequestHeader MultiValueMap<String, String> headers, @RequestBody @Valid CreateFeaturePayload payload) {
+        ResponseEntity<Void> response = this.restClient
+                .post()
+                .uri("/features/api/features")
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(h -> h.addAll(headers))
+                .body(payload)
+                .retrieve()
+                .toBodilessEntity();
+        if (response.getStatusCode().isError()) {
+            log.error("Failed to create new feature. Status: {}", response.getStatusCode());
+            throw new RuntimeException("Failed to create new feature");
+        }
+    }
 }
