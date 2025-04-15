@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sivalabs.ft</groupId>
@@ -17,7 +17,7 @@
     <description>feature-tracker webapp</description>
     <properties>
         <java.version>21</java.version>
-        <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>2.44.3</spotless-maven-plugin.version>
         <dockerImageName>sivaprasadreddy/ft-webapp</dockerImageName>
     </properties>
     <dependencies>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
-            <version>5.3.3</version>
+            <version>5.3.5</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
-            <version>6.5.2</version>
+            <version>6.7.2</version>
         </dependency>
 
         <dependency>
