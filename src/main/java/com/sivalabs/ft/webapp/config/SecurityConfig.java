@@ -1,9 +1,9 @@
 package com.sivalabs.ft.webapp.config;
 
+import com.sivalabs.ft.webapp.security.LoginSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -17,9 +17,11 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 class SecurityConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final LoginSuccessHandler loginSuccessHandler;
 
-    SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
+    SecurityConfig(ClientRegistrationRepository clientRegistrationRepository, LoginSuccessHandler loginSuccessHandler) {
         this.clientRegistrationRepository = clientRegistrationRepository;
+        this.loginSuccessHandler = loginSuccessHandler;
     }
 
     @Bean
@@ -33,7 +35,7 @@ class SecurityConfig {
                                 .authenticated())
                 .cors(CorsConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
-                .oauth2Login(Customizer.withDefaults())
+                .oauth2Login(c -> c.successHandler(loginSuccessHandler))
                 .logout(logout -> logout.clearAuthentication(true)
                         .invalidateHttpSession(true)
                         .logoutSuccessHandler(oidcLogoutSuccessHandler()));
