@@ -116,4 +116,12 @@ public class FeatureServiceClient {
             throw new RuntimeException("Failed to create new feature");
         }
     }
+
+    public Optional<FeatureDto> getFeatureByCode(String featureCode) {
+        return this.restClient
+                .get()
+                .uri("/features/api/features/{featureCode}", featureCode)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
 }

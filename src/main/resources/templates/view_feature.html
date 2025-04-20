@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      layout:decorate="~{layout}">
+<head>
+    <title>View Feature</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div>
+        <div class="p-2">
+            <img th:src="${product.imageUrl()}"
+                 th:alt="${product.name()}"
+                 height="100px">
+        </div>
+
+        <div class="p-2">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Feature Code</label>
+                            <input type="text" class="form-control" id="code"
+                                   th:value="${feature.code()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="status"
+                                   th:value="${feature.status()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="title"
+                                   th:value="${feature.title()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description"
+                                      rows="8"
+                                      th:text="${feature.description()}"
+                                      readonly
+                            ></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="createdBy" class="form-label">Created By</label>
+                            <input type="text" class="form-control" id="createdBy"
+                                   th:value="${feature.createdBy()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="assignedTo" class="form-label">Assigned To</label>
+                            <input type="text" class="form-control" id="assignedTo"
+                                   th:value="${feature.assignedTo()}" readonly>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/products/{code}/features/new(code=${product.code()})}"
+               class="btn btn-primary">
+                Create a New Feature
+            </a>
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/products/{pCode}/features/{code}/edit(pCode=${product.code()}, code=${feature.code()})}"
+               class="btn btn-info">
+                Edit Feature
+            </a>
+            <a th:href="@{/products/{code}(code=${product.code()})}"
+               class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
