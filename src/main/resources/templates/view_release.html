@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+      layout:decorate="~{layout}">
+<head>
+    <title>View Release</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div>
+        <div class="p-2">
+            <img th:src="${product.imageUrl()}"
+                 th:alt="${product.name()}"
+                 height="100px">
+        </div>
+
+        <div class="p-2">
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="code" class="form-label">Release Code</label>
+                            <input type="text" class="form-control" id="code"
+                                   th:value="${release.code()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="status"
+                                   th:value="${release.status()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="releasedAt" class="form-label">Released Date</label>
+                            <input type="text" class="form-control" id="releasedAt"
+                                   th:value="${release.releasedAt()}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description"
+                                      rows="8"
+                                      th:text="${release.description()}"
+                                      readonly
+                            ></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2" sec:authorize="isAuthenticated()">
+            <a th:href="@{/products/{code}/releases/new(code=${product.code()})}"
+               class="btn btn-primary">
+                Create a New Release
+            </a>
+            <a th:href="@{/products/{pCode}/releases/{code}/edit(pCode=${product.code()}, code=${release.code()})}"
+               class="btn btn-info">
+                Edit Release
+            </a>
+            <a th:href="@{/products/{code}(code=${product.code()})}"
+               class="btn btn-secondary">
+                Back
+            </a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

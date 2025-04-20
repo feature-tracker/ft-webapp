@@ -5,6 +5,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
       layout:decorate="~{layout}">
+<head>
+    <title>View Product</title>
+</head>
 <body>
 <div layout:fragment="content">
     <div>
@@ -19,13 +22,16 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Code</th>
                     <th>Description</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="release: ${releases}">
-                    <td th:text="${release.code()}">Release code</td>
+                    <td>
+                        <a th:href="@{/products/{pCode}/releases/{code}(pCode=${product.code()},code=${release.code()})}"
+                            th:text="${release.code()}">Release code</a>
+                    </td>
                     <td th:text="${release.description()}">Release description</td>
                 </tr>
                 </tbody>
@@ -35,6 +41,29 @@
         <div sec:authorize="isAuthenticated()">
             <a th:href="@{/products/{code}/releases/new(code=${product.code()})}"
                class="btn btn-primary">Create a New Release</a>
+        </div>
+
+        <div class="p-2">
+            <h2>Features</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="feature: ${features}">
+                    <td>
+                        <a th:href="@{/products/{pCode}/features/{code}(pCode=${product.code()},code=${feature.code()})}"
+                           th:text="${feature.code()}">Code</a>
+                    </td>
+                    <td th:text="${feature.title()}">Title</td>
+                    <td th:text="${feature.status()}">Status</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

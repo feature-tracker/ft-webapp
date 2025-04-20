@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,34 +47,72 @@ public class FeatureServiceClient {
                 .body(new ParameterizedTypeReference<>() {});
     }
 
+    public Optional<ReleaseDto> getReleaseByCode(String code) {
+        ReleaseDto releaseDto = this.restClient
+                .get()
+                .uri("/features/api/releases/{code}", code)
+                .retrieve()
+                .body(ReleaseDto.class);
+        return Optional.ofNullable(releaseDto);
+    }
+
     public void createRelease(
             @RequestHeader MultiValueMap<String, String> headers, @RequestBody @Valid CreateReleasePayload payload) {
-        ResponseEntity<Void> response = this.restClient
-                .post()
-                .uri("/features/api/releases")
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(h -> h.addAll(headers))
-                .body(payload)
-                .retrieve()
-                .toBodilessEntity();
-        if (response.getStatusCode().isError()) {
-            log.error("Failed to create new release. Status: {}", response.getStatusCode());
+        try {
+            this.restClient
+                    .post()
+                    .uri("/features/api/releases")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .headers(h -> h.addAll(headers))
+                    .body(payload)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Failed to create new release", e);
             throw new RuntimeException("Failed to create new release");
         }
     }
 
+    public void updateRelease(
+            MultiValueMap<String, String> headers,
+            String releaseCode,
+            @RequestBody @Valid UpdateReleasePayload payload) {
+        try {
+            this.restClient
+                    .put()
+                    .uri("/features/api/releases/{releaseCode}", releaseCode)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .headers(h -> h.addAll(headers))
+                    .body(payload)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Failed to update release", e);
+            throw new RuntimeException("Failed to update release");
+        }
+    }
+
+    public List<FeatureDto> getProductFeatures(String productCode) {
+        return this.restClient
+                .get()
+                .uri("/features/api/features?productCode={productCode}", productCode)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
     public void createFeature(
             @RequestHeader MultiValueMap<String, String> headers, @RequestBody @Valid CreateFeaturePayload payload) {
-        ResponseEntity<Void> response = this.restClient
-                .post()
-                .uri("/features/api/features")
-                .contentType(MediaType.APPLICATION_JSON)
-                .headers(h -> h.addAll(headers))
-                .body(payload)
-                .retrieve()
-                .toBodilessEntity();
-        if (response.getStatusCode().isError()) {
-            log.error("Failed to create new feature. Status: {}", response.getStatusCode());
+        try {
+            this.restClient
+                    .post()
+                    .uri("/features/api/features")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .headers(h -> h.addAll(headers))
+                    .body(payload)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            log.error("Failed to create new feature", e);
             throw new RuntimeException("Failed to create new feature");
         }
     }

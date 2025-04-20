@@ -26,13 +26,14 @@ class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(
-                        c -> c.requestMatchers("/js/*", "/css/*", "/images/*", "/error", "/webjars/**", "/actuator/**")
-                                .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/", "/products/*")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+        http.authorizeHttpRequests(c -> c.requestMatchers(
+                                "/js/*", "/css/*", "/images/*", "/error", "/webjars/**", "/actuator/**")
+                        .permitAll()
+                        .requestMatchers(
+                                HttpMethod.GET, "/", "/products/*", "/products/*/releases/*", "/products/*/features/*")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .cors(CorsConfigurer::disable)
                 .csrf(CsrfConfigurer::disable)
                 .oauth2Login(c -> c.successHandler(loginSuccessHandler))

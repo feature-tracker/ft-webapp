@@ -3,12 +3,13 @@ package com.sivalabs.ft.webapp.clients.features;
 import java.io.Serializable;
 import java.time.Instant;
 
-public record ReleaseDto(
+public record FeatureDto(
         Long id,
         String code,
+        String title,
         String description,
-        ReleaseStatus status,
-        Instant releasedAt,
+        FeatureStatus status,
+        String assignedTo,
         String createdBy,
         Instant createdAt,
         String updatedBy,
