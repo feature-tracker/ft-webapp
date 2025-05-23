@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+    private static final Logger log = LoggerFactory.getLogger(LoginSuccessHandler.class);
 
     private final UserServiceClient userServiceClient;
 
@@ -29,15 +32,18 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
 
-        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
-        DefaultOidcUser oidcUser = (DefaultOidcUser) token.getPrincipal();
-        Map<String, Object> claims = oidcUser.getIdToken().getClaims();
+        try {
+            OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
+            DefaultOidcUser oidcUser = (DefaultOidcUser) token.getPrincipal();
+            Map<String, Object> claims = oidcUser.getIdToken().getClaims();
 
-        String keycloakId = claims.get("sub").toString();
-        String email = claims.get("email").toString();
-        String fullName = claims.get("name").toString();
-        userServiceClient.syncUser(new SyncUserCommand(keycloakId, email, fullName, "ROLE_USER"));
-
+            String keycloakId = claims.get("sub").toString();
+            String email = claims.get("email").toString();
+            String fullName = claims.get("name").toString();
+            userServiceClient.syncUser(new SyncUserCommand(keycloakId, email, fullName, "ROLE_USER"));
+        } catch (Exception e) {
+            log.error("Failed to sync user", e);
+        }
         super.onAuthenticationSuccess(request, response, authentication);
     }
 }
